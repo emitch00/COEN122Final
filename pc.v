@@ -22,12 +22,12 @@
 
 module pc(clk, pc, constant, pcOut);
 input clk;
-input pc;
-input constant;
+input [31:0]pc;
+input [31:0]constant;
 
 wire cout;
 
-output reg pcOut;
+output reg [31:0]pcOut;
 
 always@(posedge clk)
 begin
