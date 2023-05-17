@@ -20,38 +20,40 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module IDEX(clk, branchN, branchZ, jump, jumpMem, memRead, memToReg, memWrite, pcReg, aluOp, regWrt, rd, rs, rt, adder, branchNout, branchZout, jumpOut, jumpMemout, memReadout, memToRegout, memWriteout, pcRegout, aluOpout, regWrtout, rdOut, rsOut, rtOut, adderOut);
+module IDEX(clk, branch, jump, jumpMem, memRead, memToReg, memWrite, aluSrc, regWrt, aluOp, immGen, rd, rs1, rs2, pcOut, svpc, branchOut, jumpOut, jumpMemout, memReadout, memToRegout, memWriteout, aluSrcout, regWrtout, aluOpout, immGenout, rdOut, rs1Out, rs2Out, pcOut, svpcOut);
 
 input clk;
-input branchN;
-input branchZ;
+input branch;
 input jump;
 input jumpMem;
 input memRead;
 input memToReg;
 input memWrite;
-input pcReg;
-input [3:0] aluOp;
+input aluSrc;
 input regWrt;
-input [5:0] rd;
-input [31:0] rs;
-input [31:0] rt;
-input [31:0] adder;
+input [3:0] aluOp;
+input [31:0] immGen;
+input [4:0] rd;
+input [31:0] rs1;
+input [31:0] rs2;
+input [31:0] pcOut;
+input svpc;
 
-output reg branchNout;
-output reg branchZout;
+output reg branchOut;
 output reg jumpOut;
 output reg jumpMemout;
 output reg memReadout;
 output reg memToRegout;
 output reg memWriteout;
-output reg pcRegout;
-output reg [3:0] aluOpout;
+output reg aluSrcout;
 output reg regWrtout;
-output reg [31:0] rdOut;
-output reg [31:0] rsOut;
-output reg [31:0] rtOut;
-output reg [31:0] adderOut;
+output reg [3:0] aluOpout;
+output reg [31:0] immGenout;
+output reg [4:0] rdOut;
+output reg [31:0] rs1Out;
+output reg [31:0] rs2Out;
+output reg [31:0] pcOut;
+output reg svpcOut;
 
 always@(posedge clk)
 begin
@@ -63,13 +65,15 @@ jumpMemout = jumpMem;
 memReadout = memRead;
 memToRegout = memToReg;
 memWriteout = memWrite;
-pcRegout = pcReg;
-aluOpout = aluOp;
+aluSrcout = aluSrc;
 regWrtout = regWrt;
+aluOpout = aluOp;
+immGenout = immGen;
 rdOut = rd;
-rsOut = rs;
-rtOut = rt;
-adderOut = adder;
+rs1Out = rs1;
+rs2Out = rs2;
+pcOut = pc;
+svpcOut = svpc;
 
 end
 endmodule
