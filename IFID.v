@@ -20,18 +20,18 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module IFID(clk, addIn, instIn, addOut, instOut);
+module IFID(clk, pcIn, instIn, pcOut, instOut);
 input clk;
-input [7:0] addIn;
+  input [31:0] pcIn;
 input [31:0] instIn;
 
-output reg [7:0] addOut;
+  output reg [31:0] pcOut;
 output reg [31:0] instOut;
 
 always@(posedge clk)
 begin
 
-addOut = addIn;
+pcOut = pcIn;
 instOut = instIn;
 
 end
