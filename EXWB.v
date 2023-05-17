@@ -21,52 +21,31 @@
 
 
 
-module EXWB(clk, branchN, branchZ, N, Z, jump, jumpMem, memToReg, pcReg, alu, dataMem, regWrt, rd, adder, branchNout, branchZout, Nout, Zout, jumpOut, jumpMemout, memToRegout, pcRegout, aluOut, dataMemout, regWrtout, rdOut, adderOut);
+module EXWB(clk, memToReg, dataMem, regWrt, rd, adder, svpc, memToRegout, dataMemout, regWrtout, rdOut, adderOut, svpcOut);
 input clk;
-input branchN;
-input branchZ;
-input N;
-input Z;
-input jump;
-input jumpMem;
 input memToReg;
-input pcReg;
-input [31:0] alu;
 input [31:0] dataMem;
 input regWrt;
-input [5:0] rd;
+input [4:0] rd;
 input [31:0] adder;
+input svpc;
 
-output reg branchNout;
-output reg branchZout;
-output reg Nout;
-output reg Zout;
-output reg jumpOut;
-output reg jumpMemout;
 output reg memToRegout;
-output reg pcRegout;
-output reg [31:0] aluOut;
 output reg [31:0] dataMemout;
 output reg regWrtout;
-output reg [5:0] rdOut;
+output reg [4:0] rdOut;
 output reg [31:0] adderOut;
+output reg svpcOut;
 
 always@(posedge clk)
 begin
 
-branchNout = branchN;
-branchZout = branchZ;
-Nout = N;
-Zout = Z;
-jumpOut = jump;
-jumpMemout = jumpMem;
 memToRegout = memToReg;
-pcRegout = pcReg;
-aluOut = alu;
 dataMemout = dataMem;
 regWrtout = regWrt;
 rdOut = rd;
 adderOut = adder;
+svpcOut = svpc;
 
 end
 endmodule
