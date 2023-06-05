@@ -21,17 +21,19 @@
 
 
 
-module EXWB(clk, memToReg, dataMem, regWrt, rd, adder, svpc, memToRegout, dataMemout, regWrtout, rdOut, adderOut, svpcOut);
+module EXWB(clk, memToReg, dataMem, ALU, regWrt, rd, adder, svpc, memToRegout, dataMemout, ALUout, regWrtout, rdOut, adderOut, svpcOut);
 input clk;
 input memToReg;
 input [31:0] dataMem;
+input [31:0] ALU;
 input regWrt;
-input [4:0] rd;
+input [5:0] rd;
 input [31:0] adder;
 input svpc;
 
 output reg memToRegout;
 output reg [31:0] dataMemout;
+output reg [31:0] ALUout;
 output reg regWrtout;
 output reg [4:0] rdOut;
 output reg [31:0] adderOut;
@@ -42,6 +44,7 @@ begin
 
 memToRegout = memToReg;
 dataMemout = dataMem;
+ALUout = ALU;
 regWrtout = regWrt;
 rdOut = rd;
 adderOut = adder;
