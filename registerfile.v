@@ -32,7 +32,7 @@ output reg [31:0] rtout;
 
 reg [31:0] register [63:0];
 
-always@(posedge clk) begin
+    always@(negedge clk) begin
     if(wrt == 1)
         register[rd] = datain;
     
