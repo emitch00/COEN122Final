@@ -30,7 +30,7 @@ wire [31:0] instruction [255:0];
 assign instruction[150] = 20;
 assign instruction[200] = 25;
 
-always@(posedge clk) begin
+    always@(negedge clk) begin
     inst = instruction[addr];
 end
 endmodule
