@@ -24,7 +24,8 @@ module datapath();
 //clk
 
 //all our IF wire
-reg M[rs], Rs, or_out, ForPC_out, constant, pcOutF;
+reg [31:0]PC;
+reg [31:0]pcOutF;
 reg [31:0]addr;
 reg [31:0]inst;
 //all the ID wires
@@ -57,12 +58,13 @@ reg [31:0]adderOutW;
 reg [31:0] DMtoRegOut;
 reg [31:0] SVPCtoReg;
 reg [31:0] ALUW;
+reg [31:0] rsoutW;
+reg [31:0] rtoutW;
 
 //placeholder names
 
 //all the IF module blocks
-three_oneMux For_PC(M[rs], pcOutF, Rs, or_out, ForPC_out);
-pc PC(clk, ForPC_out, constant, pcOutF);
+pc PC_adder(clk, PC, 1, pcOutF);
 instructionmemory IF(clk, addr, inst);
 //IF/ID buffer
 IFID buffer1(clk, pcOutF, inst, pcOutD, instOut);
@@ -89,7 +91,8 @@ EXWB buffer3(clk, memToRegout, DMOut, ALUOut, regWrtout, rdOut, SumOut, svpcOut,
 //WB blocks 
 two_oneMux Mem_to_Reg(dataMemW, ALUW, memToRegW, DMtoRegout);
 two_oneMux SVPC_(DMtoRegout, adderOutW, svpcW, SVPCtoReg);
-registerfile WB(clk, regWrtW, rdOutW, rs, rt, datain, rsout, rtout);
+registerfile WB(clk, regWrtW, rdOutW, rsOut, rtOut, SVPCtoReg, rsoutW, rtoutW);
+three_oneMux For_PC(pcOutF, rsOut, dataMemW, PCChange, PC);
 
 //clock
 
@@ -98,3 +101,7 @@ begin
     PC=0;
 //how much time will the required instrucctions take? how many clock cycles * period of the clock
 //#that much time
+
+$finish;
+end
+endmodule
