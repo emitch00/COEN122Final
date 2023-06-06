@@ -26,6 +26,8 @@ summation1:
     SUB x8,x2,x5    
     BRN x9
     NOP
+    NOP
+    NOP
 
 ;Version 2
 
