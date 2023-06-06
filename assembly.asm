@@ -17,13 +17,15 @@ summation1:
     ;loop
     SVPC x9,1
     LD x6,x2
+    NOP
+    NOP
     ADD x4,x4,x6
     INC x2,x2,1
+    NOP
     ;loop condition
     SUB x8,x2,x5    
     BRN x9
-        
-     NOP
+    NOP
 
 ;Version 2
 
