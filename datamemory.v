@@ -29,7 +29,7 @@ output reg [31:0] dataout;
 
 reg [31:0] data [65536:0];
 
-always@(posedge clk) begin
+    always@(negedge clk) begin
     if(wrt == 1)
         data[addr[15:0]] = datain;
     
