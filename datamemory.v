@@ -28,13 +28,16 @@ input [31:0] datain;
 output reg [31:0] dataout;
 
 reg [31:0] data [65536:0];
-assign data[2] = 3;
-assign data[3] = -4;
-assign data[4] = 5;
-assign data[5] = 2;
-assign data[6] = 20;
 
-    always@(negedge clk) begin
+initial begin
+data[2] = 3;
+data[3] = -4;
+data[4] = 5;
+data[5] = 2;
+data[6] = 20;
+end
+
+always@(negedge clk) begin
     if(wrt == 1)
         data[addr[15:0]] = datain;
     

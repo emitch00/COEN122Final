@@ -22,50 +22,52 @@
 
 module datapath();
 //clk
-
+reg Clk;
+reg V;
 //all our IF wire
-reg [31:0]PC;
-reg [31:0]pcOutF;
-reg [31:0]addr;
-reg [31:0]inst;
+wire [31:0]PC;
+wire [31:0]pcOutF;
+wire [31:0]inst;
 //all the ID wires
-reg pcOutD;
-reg [31:0]instOut;
-reg regWrt, memToReg, branch, memRead, memWrite, ALUSrc, SVPC, jump, jump_mem, Gen, add, sub, inc, neg;
-reg [31:0]regDataIn;
-reg [31:0]rsOut;
-reg [31:0]rtOut;
-reg [31:0]GenOut;
+wire [31:0]pcOutD;
+wire [31:0]instOut;
+wire regWrt, memToReg, branch, memRead, memWrite, ALUSrc, SVPC, jump, jump_mem, Gen, add, sub, inc, neg;
+wire [31:0]regDataIn;
+wire [31:0]rsOut;
+wire [31:0]rtOut;
+wire [31:0]GenOut;
 //all the EX wires
-reg branchOut, jumpOut, jumpMemout, memReadout, memToRegout, memWriteout, aluSrcout, regWrtout, svpcOut, add_out, sub_out, inc_out, neg_out;
-reg [31:0]immGenOut;
-reg [5:0] rdOut;
-reg [5:0] rsOut;
-reg [5:0] rtOut;
-reg [31:0] pcX;
+wire branchOut, jumpOut, jumpMemout, memReadout, memToRegout, memWriteout, aluSrcout, regWrtout, svpcOut, add_out, sub_out, inc_out, neg_out;
+wire [31:0]immGenout;
+wire [5:0] rdOut;
+wire [31:0] rsOutX;
+wire [31:0] rtOutX;
+wire [31:0] pcX;
 //all the MEM wires
-reg SumExtra;
-reg [31:0]SumOut;
-reg [31:0]TwoMuxOut;
-reg [31:0]ALUOut;
-reg Z, N, Zbranch, Nbranch, PCChange;
-reg [31:0]DMOut;
+wire SumExtra;
+wire [31:0]SumOut;
+wire [31:0]TwoMuxOut;
+wire [31:0]ALUOut;
+wire Z, N;
+wire Zbranch, Nbranch, Or_bit;
+wire [1:0] PCChange;
+wire [31:0]DMOut;
 //all the WB wires 
-reg memToRegW, regWrtW, svpcW;
-reg [31:0]dataMemW;
-reg [5:0]rdOutW;
-reg [31:0]adderOutW;
-reg [31:0] DMtoRegOut;
-reg [31:0] SVPCtoReg;
-reg [31:0] ALUW;
-reg [31:0] rsoutW;
-reg [31:0] rtoutW;
+wire memToRegW, regWrtW, svpcW;
+wire [31:0]dataMemW;
+wire [5:0]rdOutW;
+wire [31:0]adderOutW;
+wire [31:0]DMtoRegout;
+wire [31:0]SVPCtoReg;
+wire [31:0]ALUW;
+wire [31:0]rsoutW;
+wire [31:0]rtoutW;
 
 //placeholder names
 
 //all the IF module blocks
-pc PC_adder(clk, PC, 1, pcOutF);
-instructionmemory IF(clk, addr, inst);
+pc PC_adder(PC, 32'b000000000000000000000000000000001,V, pcOutF);
+instructionmemory IF(clk, pcOutF, inst);
 //IF/ID buffer
 IFID buffer1(clk, pcOutF, inst, pcOutD, instOut);
 
@@ -73,35 +75,46 @@ IFID buffer1(clk, pcOutF, inst, pcOutD, instOut);
 control Control(instOut[31:28], regWrt, memToReg, branch, memRead, memWrite, ALUSrc, SVPC, jump, jump_mem, Gen, add, sub, inc, neg);
 registerfile ID(clk, regWrt, instOut[27:22], instOut[21:16], instOut[15:10], regDataIn, rsOut, rtOut);
 //ask about source file
-imm_gen Imm(clk, inst[21:10], Gen, GenOut);
+imm_gen Imm(inst[21:10], Gen, GenOut);
 //ID/EX buffer 
-IDEX buffer2(clk, branch, jump, jump_mem, memRead, memToReg, memWrite, ALUSrc, regWrt, GenOut, instOut[27:22], instOut[21:16], instOut[15:10], pcOutD, SVPC, add, sub, inc, neg, branchOut, jumpOut, jumpMemout, memReadout, memToRegout, memWriteout, aluSrcout, regWrtout, immGenout, rdOut, rsOut, rtOut, pcX, svpcOut, add_out, sub_out, inc_out, neg_out);
+IDEX buffer2(clk, branch, jump, jump_mem, memRead, memToReg, memWrite, ALUSrc, regWrt, GenOut, instOut[27:22], instOut[21:16], instOut[15:10], pcOutD, SVPC, add, sub, inc, neg, branchOut, jumpOut, jumpMemout, memReadout, memToRegout, memWriteout, aluSrcout, regWrtout, immGenout, rdOut, rsOutX, rtOutX, pcX, svpcOut, add_out, sub_out, inc_out, neg_out);
 
 //EX/MEM blocks 
-rippleAdder Sum(pcX, GenOut, SumExtra, SumOut);
-two_oneMux ALUMux(rtOut, GenOut, aluSrcout, TwoMuxOut);
-alu ALU(rsOut, TwoMuxOut, add_out, inc_out, neg_out, sub_out, ALUOut, Z, N);
+rippleAdder Sum(pcX, immGenout, SumExtra, SumOut);
+two_oneMux ALUMux(rtOutX, immGenout, aluSrcout, TwoMuxOut);
+alu ALU(rsOutX, TwoMuxOut, add_out, inc_out, neg_out, sub_out, ALUOut, Z, N);
+//WHY THESE DON'T WORK
 and(Zbranch, Z, Branch);
 and(Nbranch, N, Branch);
-or(PCChange, jump, Zbranch, Nbranch);
-datamemory DM(clk, memReadout, memWriteout, ALUOut, rtOut, DMOut);
+or(Or_bit, jump, Zbranch, Nbranch);
+assign PCChange[0] = Or_bit;
+assign PCChange[1] = jump_mem;
+datamemory DM(clk, memReadout, memWriteout, ALUOut, rtOutX, DMOut);
 //MEM/WB buffer 
 EXWB buffer3(clk, memToRegout, DMOut, ALUOut, regWrtout, rdOut, SumOut, svpcOut, memToRegW, dataMemW, ALUW, regWrtW, rdOutW, adderOutW, svpcW);
 
 //WB blocks 
 two_oneMux Mem_to_Reg(dataMemW, ALUW, memToRegW, DMtoRegout);
 two_oneMux SVPC_(DMtoRegout, adderOutW, svpcW, SVPCtoReg);
-registerfile WB(clk, regWrtW, rdOutW, rsOut, rtOut, SVPCtoReg, rsoutW, rtoutW);
+registerfile WB(clk, regWrtW, rdOutW, instOut[21:16], instOut[15:10], SVPCtoReg, rsoutW, rtoutW);
 three_oneMux For_PC(pcOutF, rsOut, dataMemW, PCChange, PC);
 
 //clock
-
 initial
 begin
-    PC=0;
-//how much time will the required instrucctions take? how many clock cycles * period of the clock
+Clk = 0;
+    forever #25 Clk = ~Clk;
+end
+initial
+begin
+//PC =0
+V=0;
+//how much time will the required instrucctions take? how many clock cycles * period of the clock (4 cycles * 2ns)
 //#that much time
-
+#49
+V=1;
+#49
+//how to loop by itself
 $finish;
 end
 endmodule

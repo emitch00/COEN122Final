@@ -254,6 +254,7 @@ input sub;
 wire[31:0] twomuxout;
 wire[31:0] threemuxout;
 wire[31:0] negateout;
+wire[31:0]c;
 
 wire not_sub;
 wire [1:0] select;
@@ -263,10 +264,10 @@ wire cout;
 output [31:0] out;
 output Z;
 output N;
-
+assign c = 32'b0000000000000000000000000000000;
 
 //2to1mux
-two_oneMux mux_B (b, neg, twomuxout);
+two_oneMux mux_B (b, c, neg, twomuxout);
 
 //2s complement
 negate neg_A (a, negateout);
@@ -275,7 +276,7 @@ negate neg_A (a, negateout);
 not(not_sub, sub);
 and(select[0], inc, not_sub);
 nor(select[1], add, inc);
-three_oneMux mux_A (a, negateout, select, threemuxout);
+three_oneMux mux_A (a, negateout, 1, select, threemuxout);
 
 //fulladder
 rippleAdder fullAdder (threemuxout, twomuxout, cout, out);

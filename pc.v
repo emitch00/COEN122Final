@@ -20,17 +20,22 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module pc(clk, pc, constant, pcOut);
-input clk;
+module pc(pc, constant,V, pcOut);
 input [31:0]pc;
 input [31:0]constant;
+input V;
 
 wire cout;
+wire [31:0]add_PC;
+
+rippleAdder Adder(pc, constant, cout, add_PC);
 
 output reg [31:0]pcOut;
 
-always@(posedge clk)
-begin
-rippleAdder (pc, constant, cout, pc);
+initial begin
+if(V==0)
+    pcOut =0;
+else
+    pcOut = add_PC;
 end
 endmodule

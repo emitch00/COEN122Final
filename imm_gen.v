@@ -20,25 +20,25 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module imm_gen(clock, const, Gen, constOut);
+module imm_gen(const, Gen, constOut);
 //rt+rs
 input [11:0]const;
-input clock;
 //either the const will be 12 bits(rs+rt) or 6 bits(rt)
 input Gen; //if Save PC (12-bit y)
-output [31:0]constOut;
+output reg [31:0]constOut;
 reg i;
 reg end_copy;
 
-always@(posedge clock)
-begin
+initial begin 
 end_copy=6;
 if(Gen==1)
     end_copy=12;
-for(i=0; i<end_copy; i=i+1)
+for(i=0; i<end_copy; i=i+1)begin
     constOut[i] = const[i];
+ end
 //sign extension
-for(i=end_copy; i<32; i=i+1)
+for(i=end_copy; i<32; i=i+1)begin
     constOut[i] = const[end_copy-1];
+end
 end
 endmodule

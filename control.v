@@ -20,10 +20,10 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module control(input opcode, output regWrt, output memToReg, output branch, output memRead, output memWrite, output ALUSrc, output ALUOp, output SVPC, output jump, output jump_mem, output Gen);
+module control(opcode, regWrt, memToReg, branch, memRead, memWrite, ALUSrc, SVPC, jump, jump_mem, Gen, add, sub, inc, neg);
 input [3:0]opcode;
-output regWrt, memToReg, branch, memRead, memWrite, ALUSrc;
-output [3:0]ALUOp, SVPC, jump, jump_mem, Gen;
+output reg regWrt, memToReg, branch, memRead, memWrite, ALUSrc, add, sub, inc, neg;
+output reg SVPC, jump, jump_mem, Gen;
 
 always@(opcode)
 begin
@@ -35,7 +35,10 @@ begin
         memRead = 0;
         memWrite = 0; 
         ALUSrc = 0; 
-        ALUOp = 4'b0100;  
+        add = 1;
+        sub = 0;
+        inc = 0;
+        neg = 0;    
         SVPC = 0; 
         jump = 0; 
         jump_mem = 0; 
@@ -49,7 +52,10 @@ begin
         memRead = 0;
         memWrite = 0; 
         ALUSrc = 0; 
-        ALUOp = 4'b0100;  
+        add = 1;
+        sub = 0;
+        inc = 0;
+        neg = 0;    
         SVPC = 1; 
         jump = 0; 
         jump_mem = 0; 
@@ -63,7 +69,10 @@ begin
         memRead = 1;
         memWrite = 0; 
         ALUSrc = 1; 
-        ALUOp = 4'b0100;  
+        add = 1;
+        sub = 0;
+        inc = 0;
+        neg = 0;    
         SVPC = 0; 
         jump = 0; 
         jump_mem = 0; 
@@ -77,7 +86,10 @@ begin
         memRead = 0;
         memWrite = 1; 
         ALUSrc = 1; 
-        ALUOp = 4'b0100; 
+        add = 1;
+        sub = 0;
+        inc = 0;
+        neg = 0;   
         SVPC = 0; 
         jump = 0; 
         jump_mem = 0; 
@@ -91,7 +103,10 @@ begin
         memRead = 0;
         memWrite = 0; 
         ALUSrc = 0; 
-        ALUOp = 4'b0100; 
+        add = 1;
+        sub = 0;
+        inc = 0;
+        neg = 0;   
         SVPC = 0; 
         jump = 0; 
         jump_mem = 0; 
@@ -105,7 +120,10 @@ begin
         memRead = 0;
         memWrite = 0; 
         ALUSrc = 1; 
-        ALUOp = 4'b0101; 
+        add = 0;
+        sub = 0;
+        inc = 1;
+        neg = 0;   
         SVPC = 0; 
         jump = 0; 
         jump_mem = 0; 
@@ -119,7 +137,10 @@ begin
         memRead = 0;
         memWrite = 0; 
         ALUSrc = 1; 
-        ALUOp = 4'b0100; 
+        add = 0;
+        sub = 0;
+        inc = 0;
+        neg = 1;   
         SVPC = 0; 
         jump = 0; 
         jump_mem = 0; 
@@ -133,7 +154,10 @@ begin
         memRead = 0;
         memWrite = 0; 
         ALUSrc = 0; 
-        ALUOp = 4'b0111; 
+        add = 0;
+        sub = 1;
+        inc = 0;
+        neg = 0;  
         SVPC = 0; 
         jump = 0; 
         jump_mem = 0; 
@@ -147,7 +171,10 @@ begin
         memRead = 0;
         memWrite = 0; 
         ALUSrc = 0; 
-        ALUOp = 4'b0100; 
+        add = 1;
+        sub = 0;
+        inc = 0;
+        neg = 0;  
         SVPC = 0; 
         jump = 1; 
         jump_mem = 0; 
@@ -161,7 +188,10 @@ begin
         memRead = 0;
         memWrite = 0; 
         ALUSrc = 0; 
-        ALUOp = 4'b0100; 
+        add = 1;
+        sub = 0;
+        inc = 0;
+        neg = 0;   
         SVPC = 0; 
         jump = 0; 
         jump_mem = 0; 
@@ -175,7 +205,10 @@ begin
         memRead = 1;
         memWrite = 0; 
         ALUSrc = 0; 
-        ALUOp = 4'b0100; 
+        add = 1;
+        sub = 0;
+        inc = 0;
+        neg = 0;  
         SVPC = 0; 
         jump = 1; 
         jump_mem = 1; 
@@ -189,7 +222,10 @@ begin
         memRead = 0;
         memWrite = 0; 
         ALUSrc = 0; 
-        ALUOp = 4'b0100; 
+        add = 1;
+        sub = 0;
+        inc = 0;
+        neg = 0;  
         SVPC = 0; 
         jump = 0; 
         jump_mem = 0; 
@@ -199,3 +235,4 @@ begin
     begin
     end
 end
+endmodule

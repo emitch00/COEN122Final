@@ -49,7 +49,7 @@ wire [30:0] c;
 output cout;
 output [31:0] out;
 
-one_bitAdder one (a[0],b[0],0,c[0],out[0]);
+one_bitAdder one (a[0],b[0],1'b0,c[0],out[0]);
 one_bitAdder two (a[1],b[1],c[0],c[1],out[1]);
 one_bitAdder three (a[2],b[2],c[1],c[2],out[2]);
 one_bitAdder four (a[3],b[3],c[2],c[3],out[3]);
