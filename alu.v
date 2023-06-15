@@ -254,19 +254,21 @@ input sub;
 wire[31:0] twomuxout;
 wire[31:0] threemuxout;
 wire[31:0] negateout;
+wire[31:0]c;
 
 wire not_sub;
 wire [1:0] select;
 
 wire cout;
+wire Zout;
 
 output [31:0] out;
 output Z;
 output N;
-
+assign c = 32'b0000000000000000000000000000000;
 
 //2to1mux
-two_oneMux mux_B (b, neg, twomuxout);
+two_oneMux mux_B (b, c, neg, twomuxout);
 
 //2s complement
 negate neg_A (a, negateout);
@@ -275,7 +277,7 @@ negate neg_A (a, negateout);
 not(not_sub, sub);
 and(select[0], inc, not_sub);
 nor(select[1], add, inc);
-three_oneMux mux_A (a, negateout, select, threemuxout);
+three_oneMux mux_A (a, negateout, 1, select, threemuxout);
 
 //fulladder
 rippleAdder fullAdder (threemuxout, twomuxout, cout, out);
@@ -284,9 +286,10 @@ rippleAdder fullAdder (threemuxout, twomuxout, cout, out);
 //For N, set it to value of most significant bit
 
 //Z
-nor(Z, out[0], out[1], out[2], out[3], out[4], out[5], out[6], out[7], out[8], out[9], out[10], out[11], out[12], out[13], out[14], out[15], out[16], out[17], out[18], out[19], out[20], out[21], out[22], out[23], out[24], out[25], out[26], out[27], out[28], out[29], out[30], out[31]);
-
+nor(Zout, out[0], out[1], out[2], out[3], out[4], out[5], out[6], out[7], out[8], out[9], out[10], out[11], out[12], out[13], out[14], out[15], out[16], out[17], out[18], out[19], out[20], out[21], out[22], out[23], out[24], out[25], out[26], out[27], out[28], out[29], out[30], out[31]);
+assign Z = Zout;
 //N
 assign N = out[31];
+
 
 endmodule

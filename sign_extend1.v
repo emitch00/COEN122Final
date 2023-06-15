@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 05/10/2023 03:36:01 PM
+// Create Date: 06/09/2023 02:50:55 PM
 // Design Name: 
-// Module Name: pc
+// Module Name: sign_extend1
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,25 +20,15 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module pc(clock, pc, pcOut);
-input [31:0]pc;
-input clock;
-//input [31:0]constant;
-//input V;
+module sign_extend1(in, out);
+input [11:0]in;
+output reg [31:0]out;
+reg i;
+initial begin
+if(in[11] == 1)
+    out = {20'b11111111111111111111, in};
 
-
-
-
-//rippleAdder Adder(pc, constant, cout, add_PC);
-
-output reg [31:0]pcOut;
-
-always@(negedge clock)
-
- begin
-if(pc==0)
-    pcOut =0;
-else
-    pcOut = pc;
+    else 
+    out = {20'b00000000000000000000, in};
 end
 endmodule

@@ -35,7 +35,7 @@ output reg memToRegout;
 output reg [31:0] dataMemout;
 output reg [31:0] ALUout;
 output reg regWrtout;
-output reg [4:0] rdOut;
+output reg [5:0] rdOut;
 output reg [31:0] adderOut;
 output reg svpcOut;
 
